@@ -274,15 +274,6 @@ Raw API payloads will be stored in S3 with the following structure:
 
 4. **Notifications**: Should business users (beyond operations team) be notified of significant inventory changes?
 
-## Timeline and Resources
-
-### Estimated Timeline
-
-- Development: 3 days
-- Testing: 2 days
-- Deployment: 1 day
-- Total: 1 week
-
 ### Required Resources
 
 - 1 Backend developer
