@@ -1,117 +1,150 @@
-<-- BACKEND API & DB SPEC TEMPLATE • v1.0 -->
-## 🧩 Feature: <Feature Name>
+<!-- =============================================================
+  BACKEND FEATURE SPEC TEMPLATE  •  v2.0  (May 2025)
+  Copy → rename to docs/api/<feature>.md, then replace <PLACEHOLDERS>.
+  Sections marked <!-- optional --> may be deleted if not relevant.
+============================================================= -->
 
-<One-sentence business goal or user story>
+## 🧩 Technical Specification: <Feature Name>
+
+### Overview  (short)
+<One-sentence summary of what the feature does and for whom.>
+
+### Business Context  <!-- optional -->
+- **Problem Statement** <Why this matters to the business>
+- **Goals** <…>    **Non-Goals** <…>
 
 ---
+
+## 1  System Architecture  <!-- optional -->
+
+```mermaid
+flowchart TD
+  Client -->|HTTP| Service
+  Service --> DB[(DB)]
+  Service -->|Publishes| Kafka((topic))
+```
+
+| Component | Responsibility | Notes |
+|-----------|----------------|-------|
+| <Service> | <What it does> | <Language / framework> |
+| <DB>      | <Main tables>  | <RDS / Dynamo / …> |
+
+## 2  API Design <!-- duplicate Endpoint block for each route -->
 
 ### 🔗 Endpoint
+
 | Key | Value |
 |-----|-------|
-| **Path** | `<HTTP path>` |
-| **Method** | `GET | POST | PUT | PATCH | DELETE` |
-| **Auth** | `Bearer JWT | Api-Key | none` |
-| **Description** | <What this endpoint does> |
+| Path | <HTTP path> |
+| Method | `GET` |
+| Auth | `Bearer JWT` |
+| Description | <What this endpoint does> |
+| Idempotency-Key | Yes |
 
-#### Request
+#### 2.1 Request
+
 ```json
 { "<field>": "<example>" }
-
-#### Response
-##### 1.2 Success (200)
-```json
-{
-  "data": { /* ... */ },
-  "meta": { /* ... */ }
-}
 ```
 
-##### 1.3 Error Responses
+| Field | Type | Required | Validation / Format | Description |
+|-------|------|----------|---------------------|-------------|
+|       |      |          |                     |             |
+
+#### 2.2 Success (200)
+
+```json
+{ "data": { … }, "meta": { … } }
+```
+
+#### 2.3 Error Responses
+
 | Status | Code | Message | Condition |
 |--------|------|---------|-----------|
-| 400 | `<CODE>` | `<Msg>` | `<When>` |
+| 400 | <CODE> | <Msg> | <When> |
 
----
+## 3 Async Events (Kafka / SNS / Webhooks) <!-- optional -->
+Include this section only if the feature emits events across
+service boundaries.
+Skip entirely if changes are local to one service.
 
-## 2️⃣ ASYNC EVENTS (optional)
-| Event name | Trigger | Payload JSON | Destination |
-|------------|---------|--------------|-------------|
-| `<event>` | `<when>` | `{ ... }` | Kafka topic / SNS / etc. |
+| Event name | Trigger | Payload JSON | Destination / Topic | Partition Key |
+|------------|---------|--------------|---------------------|---------------|
+| <entity.updated> | After successful 200 | { "id": "uuid", … } | inventory.updates | id |
 
-## 3️⃣ DATABASE SCHEMA
-### 3.1 SQL DDL / ORM
+## 4 Database Design
+
+### 4.1 SQL DDL (or ORM)
+
 ```sql
--- CREATE / ALTER TABLE statements go here
+-- CREATE / ALTER TABLE statements
 ```
 
-### 3.2 ER Diagram (Mermaid)
+### 4.2 ER Diagram
+
 ```mermaid
 erDiagram
   TABLE_A ||--o{ TABLE_B : FK
-  TABLE_A {
-    UUID id PK
-    /* ... */
-  }
-  TABLE_B {
-    UUID id PK
-    UUID table_a_id FK
-    /* ... */
-  }
+  TABLE_A { id UUID PK … }
+  TABLE_B { id UUID PK table_a_id UUID FK … }
 ```
 
-## 4️⃣ REQUEST FLOW DIAGRAM
+## 5 Request Flow Diagram
+
 ```mermaid
 sequenceDiagram
   participant Client
   participant API
   participant DB
-  Client ->> API : <HTTP request>
-  API    ->> DB  : SQL / ORM op
+  Client ->> API : POST /…
+  API    ->> DB  : SQL
   API   -->> Client : 200 OK
 ```
 
-## 5️⃣ EDGE CASES & DISCUSSION POINTS
-- `<Case & mitigation>`
-- `<Case & mitigation>`
+## 6 Implementation Details <!-- optional -->
 
-## 6️⃣ NON-FUNCTIONAL REQUIREMENTS
-| Category | Requirement |
-|----------|-------------|
-| Performance | `<p99 latency ≤ 300 ms>` |
-| Observability | `Trace + metric name` |
-| Security | `TLS 1.2+, input sanitization` |
-| Compliance | `GDPR tagging for PII fields` |
+| Area | Decision |
+|------|----------|
+| Scheduling | <cron 0 2 * * *> |
+| External API | ERP /inventory (Bearer token) |
+| Error Handling | Retry 3× with exponential back-off |
+| Concurrency | Check running job row; use row-level locks |
+| Storage | Raw payload → S3 bucket/path (30-day TTL) |
 
-## 7️⃣ DEPLOYMENT / MIGRATION STEPS
-1. Run migration `<file.sql>` on staging & prod.
-2. Deploy service version `<tag>`.
+## 7 Monitoring & Alerting <!-- optional -->
 
-## 8️⃣ REFERENCES
-- PM Spec: `<link>`
-- UX Flow: `<Figma link>`
-- ADR: `<doc link>`
+| Metric / Alert | Threshold | Channel |
+|----------------|-----------|---------|
+| items_changed | > 10 000 | #ops-inventory |
+| Job duration | > 15 min | PagerDuty |
 
-## 9️⃣ SAMPLES
-### 2.2 `samples/password-reset.md` – full example  
-*(paste the re-formatted password-reset spec from earlier response)*
+## 8 Edge Cases & Discussion Points
 
-### 2.3 `README.md`
+<e.g. silent-fail for unknown email addresses>
 
-```markdown
-# Backend API & DB Specs
+<e.g. handling discontinued SKUs>
 
-This repo hosts the **canonical template** (`template.md`) and reference
-examples (`samples/`) for all backend feature specifications.
+## 9 Testing Strategy <!-- optional -->
 
-## How to use
+| Layer | What to test |
+|-------|--------------|
+| Unit | API response parsing; DB update logic |
+| Integration | Mock upstream API; verify S3 upload |
+| Performance | 50 k SKUs ≤ 15 min |
 
-1. **Copy** `template.md` into your feature branch (any service repo) or into
-   Claude's GitHub picker.
-2. **Fill** the placeholders manually *or* let Claude/Cursor auto-fill by also
-   selecting relevant code files and past specs.
-3. **Save** the completed spec as `docs/api/<feature>.md` in the service repo.
-4. Open a PR – reviewers confirm diagrams render & SQL lint passes.
+## 10 Deployment / Migration Steps
 
-> See `samples/password-reset.md` for a fully-populated example.
-```
+Apply SQL migration <file.sql>.
 
+Deploy service version <tag>.
+
+Enable cron job in production.
+
+
+## 11 References
+
+PM Spec: <Notion URL>
+
+Figma Flow: <Figma URL>
+
+ADR: <doc link> 
