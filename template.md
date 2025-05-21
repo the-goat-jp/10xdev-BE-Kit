@@ -66,7 +66,7 @@ flowchart TD
 ## 3 Async Events (Kafka / SNS / Webhooks) <!-- optional -->
 Include this section only if the feature emits events across
 service boundaries.
-Skip entirely if changes are local to one service.
+Skip entirely if changes are local to one service or deemed as unnecessary.
 
 | Event name | Trigger | Payload JSON | Destination / Topic | Partition Key |
 |------------|---------|--------------|---------------------|---------------|
