@@ -63,15 +63,6 @@ flowchart TD
 |--------|------|---------|-----------|
 | 400 | <CODE> | <Msg> | <When> |
 
-## 3 Async Events (Kafka / SNS / Webhooks) <!-- optional -->
-Include this section only if the feature emits events across
-service boundaries.
-Skip entirely if changes are local to one service or deemed as unnecessary.
-
-| Event name | Trigger | Payload JSON | Destination / Topic | Partition Key |
-|------------|---------|--------------|---------------------|---------------|
-| <entity.updated> | After successful 200 | { "id": "uuid", … } | inventory.updates | id |
-
 ## 4 Database Design
 
 ### 4.1 SQL DDL (or ORM)
@@ -100,51 +91,3 @@ sequenceDiagram
   API    ->> DB  : SQL
   API   -->> Client : 200 OK
 ```
-
-## 6 Implementation Details <!-- optional -->
-
-| Area | Decision |
-|------|----------|
-| Scheduling | <cron 0 2 * * *> |
-| External API | ERP /inventory (Bearer token) |
-| Error Handling | Retry 3× with exponential back-off |
-| Concurrency | Check running job row; use row-level locks |
-| Storage | Raw payload → S3 bucket/path (30-day TTL) |
-
-## 7 Monitoring & Alerting <!-- optional -->
-
-| Metric / Alert | Threshold | Channel |
-|----------------|-----------|---------|
-| items_changed | > 10 000 | #ops-inventory |
-| Job duration | > 15 min | PagerDuty |
-
-## 8 Edge Cases & Discussion Points
-
-<e.g. silent-fail for unknown email addresses>
-
-<e.g. handling discontinued SKUs>
-
-## 9 Testing Strategy <!-- optional -->
-
-| Layer | What to test |
-|-------|--------------|
-| Unit | API response parsing; DB update logic |
-| Integration | Mock upstream API; verify S3 upload |
-| Performance | 50 k SKUs ≤ 15 min |
-
-## 10 Deployment / Migration Steps
-
-Apply SQL migration <file.sql>.
-
-Deploy service version <tag>.
-
-Enable cron job in production.
-
-
-## 11 References
-
-PM Spec: <Notion URL>
-
-Figma Flow: <Figma URL>
-
-ADR: <doc link> 

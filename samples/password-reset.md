@@ -13,7 +13,6 @@ Allow users who have forgotten their password to request a reset link and set a 
 | **Method** | `POST` |
 | **Auth** | none |
 | **Description** | Generates a reset token and emails the link to the user |
-| **Idempotency-Key** | No |
 
 #### 1.1 Request
 ```json
@@ -46,7 +45,6 @@ Allow users who have forgotten their password to request a reset link and set a 
 | **Method** | `GET` |
 | **Auth** | none |
 | **Description** | Checks whether a reset token is valid and unexpired |
-| **Idempotency-Key** | No |
 
 #### 2.1 Query Parameter
 | Parameter | Type | Required | Description |
@@ -176,15 +174,3 @@ sequenceDiagram
     API     ->> DB  : UPDATE password_reset_tokens SET used_at = NOW()
     API    -->> Client : 200 OK
 ```
-
-## 5️⃣ EDGE CASES & DISCUSSION POINTS
-- Silent-fail for unknown email → always return 200 to prevent user enumeration.
-- Multiple requests → newest token invalidates prior ones.
-- Hash tokens in DB; never store plaintext.
-- Invalidate sessions after successful reset.
-- Rate-limit /request (≤ 5 per hour per email).
-- Audit-log all reset attempts for security.
-
-## 6️⃣ REFERENCES
-- PM Spec: https://notion.so/...
-- UX Flow: https://figma.com/... 
