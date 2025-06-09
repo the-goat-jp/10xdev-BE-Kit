@@ -1,0 +1,14 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Auto-Attach Context
+
+Automatically include these essential project files for context:
+
+- `docs/spec/*.md` - Tech Spec requirement
+- `docs/implementation-plan.md` - Current implementation plan
+- `docs/project-structure.md` - Project architecture overview
+
+These files provide crucial context about the project structure, current implementation status, and API specifications that inform all development decisions.

@@ -1,0 +1,32 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Human Control Keywords
+
+These keywords provide explicit control over the development workflow:
+
+## Workflow Control
+
+### NEXT_PHASE
+- **Purpose**: Approve current phase and proceed to next
+- **Usage**: Use when current implementation phase is complete and ready to advance
+- **Effect**: AI will mark current phase as **COMPLETED** and begin next phase
+
+### STOP
+- **Purpose**: Pause all activity until further instruction
+- **Usage**: Use when you need to halt development for review, planning, or external dependencies
+- **Effect**: AI will cease all implementation activities and await explicit direction
+
+### VIBE_REVIEW
+- **Purpose**: Switch to review mode for current changes
+- **Usage**: Use when you want the AI to review staged changes or recent implementations
+- **Effect**: AI will analyze current state against specifications and provide feedback
+
+## Usage Guidelines
+
+- Keywords are case-sensitive and should be used exactly as shown
+- Use keywords at the beginning of your message for clear intent
+- Combine with additional context when needed (e.g., "REVIEW the authentication implementation")
+- Keywords work across all AI tools and contexts within the project

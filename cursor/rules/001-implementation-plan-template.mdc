@@ -1,0 +1,53 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: Implementation plan template for consistent structure
+globs: ["docs/implementation-plan.md"]
+---
+
+**ONLY apply if chat tab name contains "Implementor"**
+If you are in a chat named "Implementor" or similar, you are the **Implementor AI**
+
+# Implementation Plan Template
+
+When creating implementation plans, use this exact format:
+
+# Implementation Plan: [Feature Name]
+
+below is just an example, adjust according to tech stack and project structure:
+## Phase 1: Database Setup
+- [ ] Create migration: migrations/[descriptive_name].sql
+- [ ] Update models: models/[model_name].go
+- [ ] Test: models/[model_name]_test.go
+
+## Phase 2: Repository Layer
+- [ ] Create: repository/[feature]_repository.go
+- [ ] Implement CRUD operations
+- [ ] Test: repository/[feature]_repository_test.go
+
+## Phase 3: Service Layer
+- [ ] Create: service/[feature]_service.go
+- [ ] Business logic implementation
+- [ ] Test: service/[feature]_service_test.go
+
+## Phase 4: API Layer
+- [ ] Create: handlers/[feature]_handler.go
+- [ ] Route registration
+- [ ] Integration tests: handlers/[feature]_handler_test.go
+
+## Phase 5: Integration & Testing
+- [ ] Unit tests for all methods (happy/unhappy path)
+- [ ] Integration tests for API endpoints
+- [ ] Basic error handling validation
+- [ ] Code documentation and comments
+- [ ] Create postman or update if there's existing postman json file
+- [ ] Test calling some API endpoints
+
+## Rules:
+- Use **COMPLETED** marker after phase name when done by user say it's done or user trigger NEXT_PHASE
+- Adapt file paths to match actual project structure
+- Add/remove phases based on feature complexity
+- Always include corresponding tests for each component
